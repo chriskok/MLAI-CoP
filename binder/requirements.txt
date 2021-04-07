@@ -1,0 +1,7 @@
+numpy
+gym
+matplotlib
+Pandas
+Pillow
+PyOpenGL==3.1.*
+PyOpenGL-accelerate==3.1.*
