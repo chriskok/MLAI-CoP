@@ -1,13 +1,5 @@
 numpy
-scipy
-Pillow
-cython
+gym
 matplotlib
-scikit-image
-tensorflow==1.13.1
-keras==2.0.8
-opencv-python
-pycocotools
-h5py
-imgaug
-IPython[all]
+Pandas
+Pillow
