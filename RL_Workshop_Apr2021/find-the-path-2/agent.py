@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from path import final_states
+from board import final_states
 
 
 # Creating class for the Q-learning table
@@ -32,7 +32,7 @@ class QLearningTable:
             action = state_action.idxmax()
         else:
             # Choosing random action - left 10 % for choosing randomly
-            action = np.random.choice(self.actions)
+            action = np.random.choice(self.actions) 
         return action
 
     # Function for learning and updating Q-table with new knowledge
@@ -52,6 +52,10 @@ class QLearningTable:
         # Updating Q-table with new knowledge
         self.q_table.loc[state, action] += self.lr * (q_target - q_predict)
 
+        qtmp = self.q_table.copy()
+        qtmp.columns =  ['U', 'D', 'L', 'R']
+        #if 1:
+        #    print(qtmp)
         return self.q_table.loc[state, action]
 
     # Adding to the Q-table new states
@@ -86,10 +90,18 @@ class QLearningTable:
         print()
         print('Length of full Q-table =', len(self.q_table.index))
         print('Full Q-table:')
-        print(self.q_table)
+
+        def show_table(q):
+            try:
+                from IPython.display import HTML
+                display(HTML(q.to_html()))
+            except:
+                print(self.q_table)
+        show_table(self.q_table)
 
     # Plotting the results for the number of steps
     def plot_results(self, steps, cost):
+        plt.rcParams['figure.dpi'] = 100
         f, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 6))
         #
         ax1.plot(np.arange(len(steps)), steps, 'b')
@@ -121,4 +133,7 @@ class QLearningTable:
         plt.ylabel('Cost')
         '''
         # Showing the plots
+        plt.ioff()
         plt.show()
+
+        return
