@@ -5,9 +5,9 @@ import random
 import itertools as its
 import numpy as np
 
-import gym
-from gym.envs.toy_text import discrete
-from gym import utils
+#import gym
+#from gym.envs.toy_text import discrete
+#from gym import utils
 
 from mutils import Utils as mut
 

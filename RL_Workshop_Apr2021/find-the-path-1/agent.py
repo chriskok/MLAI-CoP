@@ -22,7 +22,6 @@ class DPAgentGrid(object):
         pass
 
     def play(self):
-        input('Press enter to play')
         self.grid.render()
         while not self._is_terminal(self.state):
             a = next(iter(self.policy[self.state]))
@@ -161,38 +160,37 @@ class DPAgentGrid(object):
 
             if biggest_change < self.close_enough:
                 break
-
         self.show_V()
 
     def improve_policy(self, stop=False):
+        self.evaluate_policy()
+        converged = True
+        for s0 in self._iter_states():
+            if self._is_terminal(s0):
+                continue
+            old_a = next(iter(self.policy[s0]))
+            new_a = None
+            best_value = float('-inf')
+            for a in self.action_space:
+                v = 0
+                for s1 in self._iter_states():
+                    r = self.rewards.get((s0, a, s1), 0)
+                    v += self.trans_prob.get((s0, a, s1), 0) * (r + self.gamma * self.V.get(s1, 0))
+                if v > best_value:
+                    best_value = v
+                    new_a = a
+
+            self.policy[s0] = {new_a: 1.}
+            if new_a != old_a:
+                converged = False
+        if converged:
+        	print('Policy converged')
+        	return 
+
+
+    def compute_policy(self, stop=False):
         while True:
-            self.evaluate_policy()
-            converged = True
-            for s0 in self._iter_states():
-                if self._is_terminal(s0):
-                    continue
-                old_a = next(iter(self.policy[s0]))
-                new_a = None
-                best_value = float('-inf')
-                for a in self.action_space:
-                    v = 0
-                    for s1 in self._iter_states():
-                        r = self.rewards.get((s0, a, s1), 0)
-                        v += self.trans_prob.get((s0, a, s1), 0) * (r + self.gamma * self.V.get(s1, 0))
-                    if v > best_value:
-                        best_value = v
-                        new_a = a
-
-                self.policy[s0] = {new_a: 1.}
-                if new_a != old_a:
-                    converged = False
-
-            if stop:
-                input('Enter to continue')
-            if converged:
-                break
-
-
+        	improve_policy()
 
 
 
